@@ -1,2 +1,2 @@
-# ntswell-alerting
-Alerting rules and whatnot for my infra
+# ntswell-observability
+Dashboards, Alerting rules, and whatnot for my infra

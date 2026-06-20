@@ -1,0 +1,714 @@
+apiVersion: 1
+groups:
+    - orgId: 1
+      name: Over 5 Minutes
+      folder: Node Metrics
+      interval: 5m
+      rules:
+        - uid: cfpo32wlumznka
+          title: NodeCPUUsageHigh
+          condition: A
+          data:
+            - refId: cpu_load_value
+              relativeTimeRange:
+                from: 10800
+                to: 0
+              datasourceUid: ffmtg9w5jh62oc
+              model:
+                datasource:
+                    type: graphite
+                    uid: ffmtg9w5jh62oc
+                instant: false
+                intervalMs: 1000
+                maxDataPoints: 43200
+                range: true
+                refCount: 0
+                refId: cpu_load_value
+                target: proxmox.nodes.lavender.cpustat.avg1
+            - refId: cpu_number_of_cores
+              relativeTimeRange:
+                from: 10800
+                to: 0
+              datasourceUid: ffmtg9w5jh62oc
+              model:
+                datasource:
+                    type: graphite
+                    uid: ffmtg9w5jh62oc
+                instant: false
+                intervalMs: 1000
+                maxDataPoints: 43200
+                range: true
+                refCount: 0
+                refId: cpu_number_of_cores
+                target: proxmox.nodes.lavender.cpustat.cpus
+            - refId: cpu_usage_percent
+              relativeTimeRange:
+                from: 10800
+                to: 0
+              datasourceUid: __expr__
+              model:
+                datasource:
+                    type: __expr__
+                    uid: __expr__
+                expression: ($cpu_load_value*100)/$cpu_number_of_cores
+                intervalMs: 1000
+                maxDataPoints: 43200
+                refId: cpu_usage_percent
+                type: math
+                window: ""
+            - refId: A
+              datasourceUid: __expr__
+              model:
+                conditions:
+                    - evaluator:
+                        params:
+                            - 90
+                            - 0
+                        type: gt
+                      operator:
+                        type: and
+                      query:
+                        params: []
+                      reducer:
+                        params: []
+                        type: avg
+                      type: query
+                datasource:
+                    name: Expression
+                    type: __expr__
+                    uid: __expr__
+                expression: B
+                hide: false
+                intervalMs: 1000
+                maxDataPoints: 43200
+                refId: A
+                type: threshold
+            - refId: B
+              datasourceUid: __expr__
+              model:
+                conditions:
+                    - evaluator:
+                        params:
+                            - 0
+                            - 0
+                        type: gt
+                      operator:
+                        type: and
+                      query:
+                        params: []
+                      reducer:
+                        params: []
+                        type: avg
+                      type: query
+                datasource:
+                    name: Expression
+                    type: __expr__
+                    uid: __expr__
+                expression: cpu_usage_percent
+                hide: false
+                intervalMs: 1000
+                maxDataPoints: 43200
+                reducer: mean
+                refId: B
+                type: reduce
+          dashboardUid: suvlbn5
+          panelId: 7
+          noDataState: NoData
+          execErrState: Error
+          for: 5m
+          annotations:
+            __dashboardUid__: suvlbn5
+            __panelId__: "7"
+            summary: Node CPU Usage is over 90% for more than 5 minutes.
+          isPaused: false
+          notification_settings:
+            receiver: telegram ntswell-alerts
+        - uid: cfpo3b8k0775sf
+          title: NodeMemoryUsageHigh
+          condition: A
+          data:
+            - refId: host_memory_total
+              relativeTimeRange:
+                from: 10800
+                to: 0
+              datasourceUid: ffmtg9w5jh62oc
+              model:
+                datasource:
+                    type: graphite
+                    uid: ffmtg9w5jh62oc
+                instant: false
+                intervalMs: 1000
+                maxDataPoints: 43200
+                range: true
+                refCount: 0
+                refId: host_memory_total
+                target: proxmox.nodes.lavender.memory.memtotal
+            - refId: host_memory_used
+              relativeTimeRange:
+                from: 10800
+                to: 0
+              datasourceUid: ffmtg9w5jh62oc
+              model:
+                datasource:
+                    type: graphite
+                    uid: ffmtg9w5jh62oc
+                instant: false
+                intervalMs: 1000
+                maxDataPoints: 43200
+                range: true
+                refCount: 0
+                refId: host_memory_used
+                target: proxmox.nodes.lavender.memory.memused
+            - refId: memory_used_percent
+              relativeTimeRange:
+                from: 10800
+                to: 0
+              datasourceUid: __expr__
+              model:
+                datasource:
+                    type: __expr__
+                    uid: __expr__
+                expression: ($host_memory_used/$host_memory_total)*100
+                intervalMs: 1000
+                maxDataPoints: 43200
+                refId: memory_used_percent
+                type: math
+                window: ""
+            - refId: A
+              datasourceUid: __expr__
+              model:
+                conditions:
+                    - evaluator:
+                        params:
+                            - 80
+                            - 0
+                        type: gt
+                      operator:
+                        type: and
+                      query:
+                        params: []
+                      reducer:
+                        params: []
+                        type: avg
+                      type: query
+                datasource:
+                    name: Expression
+                    type: __expr__
+                    uid: __expr__
+                expression: memory_used_percent_last
+                intervalMs: 1000
+                maxDataPoints: 43200
+                refId: A
+                type: threshold
+            - refId: memory_used_percent_last
+              datasourceUid: __expr__
+              model:
+                conditions:
+                    - evaluator:
+                        params:
+                            - 0
+                            - 0
+                        type: gt
+                      operator:
+                        type: and
+                      query:
+                        params: []
+                      reducer:
+                        params: []
+                        type: avg
+                      type: query
+                datasource:
+                    name: Expression
+                    type: __expr__
+                    uid: __expr__
+                expression: memory_used_percent
+                intervalMs: 1000
+                maxDataPoints: 43200
+                reducer: last
+                refId: memory_used_percent_last
+                settings:
+                    mode: dropNN
+                type: reduce
+          dashboardUid: suvlbn5
+          panelId: 11
+          noDataState: NoData
+          execErrState: Error
+          for: 5m
+          annotations:
+            __dashboardUid__: suvlbn5
+            __panelId__: "11"
+            summary: Node Memory Usage is over 80% for more than 5 minutes.
+          isPaused: false
+          notification_settings:
+            receiver: telegram ntswell-alerts
+    - orgId: 1
+      name: Over 10 Seconds
+      folder: Network Metrics
+      interval: 10s
+      rules:
+        - uid: efpo4oyh8v3lse
+          title: NetworkSwitchStateChangeOff
+          condition: C
+          data:
+            - refId: A
+              relativeTimeRange:
+                from: 600
+                to: 0
+              datasourceUid: ffmvx2867d69sc
+              model:
+                datasource:
+                    type: prometheus
+                    uid: ffmvx2867d69sc
+                editorMode: code
+                expr: |-
+                    sum by(instance, job, port) (
+                      (tplink_port_info{state="enabled"} * 1) or (tplink_port_info{state="disabled"} * 0)
+                    )
+                instant: true
+                intervalMs: 1000
+                legendFormat: __auto
+                maxDataPoints: 43200
+                range: false
+                refId: A
+            - refId: B
+              relativeTimeRange:
+                from: 600
+                to: 0
+              datasourceUid: ffmvx2867d69sc
+              model:
+                datasource:
+                    type: prometheus
+                    uid: ffmvx2867d69sc
+                editorMode: code
+                expr: |-
+                    sum by(instance, job, port) (
+                      (tplink_port_info{state="enabled"} offset 5m * 1) or (tplink_port_info{state="disabled"} offset 5m * 0)
+                    )
+                instant: true
+                intervalMs: 1000
+                legendFormat: __auto
+                maxDataPoints: 43200
+                range: false
+                refId: B
+            - refId: C
+              datasourceUid: __expr__
+              model:
+                conditions:
+                    - evaluator:
+                        params:
+                            - 0
+                            - 0
+                        type: gt
+                      operator:
+                        type: and
+                      query:
+                        params: []
+                      reducer:
+                        params: []
+                        type: avg
+                      type: query
+                datasource:
+                    name: Expression
+                    type: __expr__
+                    uid: __expr__
+                expression: $A == 0 && $B != 0
+                intervalMs: 1000
+                maxDataPoints: 43200
+                refId: C
+                type: math
+          dashboardUid: suvlbn5
+          panelId: 13
+          noDataState: NoData
+          execErrState: Error
+          for: 10s
+          annotations:
+            __dashboardUid__: suvlbn5
+            __panelId__: "13"
+            summary: A port in the Network Switch has flipped to DISABLED over 10 seconds.
+          isPaused: false
+          notification_settings:
+            receiver: telegram ntswell-alerts
+        - uid: cfpo5ftzfjcaof
+          title: NetworkSwitchStateChangeOn
+          condition: C
+          data:
+            - refId: A
+              relativeTimeRange:
+                from: 600
+                to: 0
+              datasourceUid: ffmvx2867d69sc
+              model:
+                datasource:
+                    type: prometheus
+                    uid: ffmvx2867d69sc
+                editorMode: code
+                expr: |-
+                    sum by(instance, job, port) (
+                      (tplink_port_info{state="enabled"} * 1) or (tplink_port_info{state="disabled"} * 0)
+                    )
+                instant: true
+                intervalMs: 1000
+                legendFormat: __auto
+                maxDataPoints: 43200
+                range: false
+                refId: A
+            - refId: B
+              relativeTimeRange:
+                from: 600
+                to: 0
+              datasourceUid: ffmvx2867d69sc
+              model:
+                datasource:
+                    type: prometheus
+                    uid: ffmvx2867d69sc
+                editorMode: code
+                expr: |-
+                    sum by(instance, job, port) (
+                      (tplink_port_info{state="enabled"} offset 5m * 1) or (tplink_port_info{state="disabled"} offset 5m * 0)
+                    )
+                instant: true
+                intervalMs: 1000
+                legendFormat: __auto
+                maxDataPoints: 43200
+                range: false
+                refId: B
+            - refId: C
+              datasourceUid: __expr__
+              model:
+                conditions:
+                    - evaluator:
+                        params:
+                            - 0
+                            - 0
+                        type: gt
+                      operator:
+                        type: and
+                      query:
+                        params: []
+                      reducer:
+                        params: []
+                        type: avg
+                      type: query
+                datasource:
+                    name: Expression
+                    type: __expr__
+                    uid: __expr__
+                expression: $A != 0 && $B == 0
+                intervalMs: 1000
+                maxDataPoints: 43200
+                refId: C
+                type: math
+          dashboardUid: suvlbn5
+          panelId: 13
+          noDataState: NoData
+          execErrState: Error
+          for: 10s
+          annotations:
+            __dashboardUid__: suvlbn5
+            __panelId__: "13"
+            summary: A port in the Network Switch has flipped to ENABLED over 10 seconds.
+          isPaused: false
+          notification_settings:
+            receiver: telegram ntswell-alerts
+    - orgId: 1
+      name: Over 10 Seconds
+      folder: Room Metrics
+      interval: 10s
+      rules:
+        - uid: efpo1l8bht2psa
+          title: PowerOutletVoltageHigh
+          condition: C
+          data:
+            - refId: A
+              relativeTimeRange:
+                from: 10800
+                to: 0
+              datasourceUid: ffmvx2867d69sc
+              model:
+                datasource:
+                    type: prometheus
+                    uid: ffmvx2867d69sc
+                editorMode: builder
+                expr: tuya_power_voltage_v
+                instant: true
+                interval: ""
+                intervalMs: 15000
+                legendFormat: __auto
+                maxDataPoints: 43200
+                range: false
+                refId: A
+            - refId: C
+              queryType: expression
+              datasourceUid: __expr__
+              model:
+                conditions:
+                    - evaluator:
+                        params:
+                            - 231
+                        type: gt
+                      operator:
+                        type: and
+                      query:
+                        params:
+                            - C
+                      reducer:
+                        params: []
+                        type: last
+                      type: query
+                datasource:
+                    type: __expr__
+                    uid: __expr__
+                expression: A
+                intervalMs: 1000
+                maxDataPoints: 43200
+                refId: C
+                type: threshold
+          dashboardUid: suvlbn5
+          panelId: 24
+          noDataState: NoData
+          execErrState: Error
+          for: 10s
+          annotations:
+            __dashboardUid__: suvlbn5
+            __panelId__: "24"
+            summary: beastnet-power-outlet-1 voltage is over 5% tolerance. Electronic devices are receiving overvoltage.
+          isPaused: false
+          notification_settings:
+            receiver: telegram ntswell-alerts
+        - uid: afpo3jn83s2rka
+          title: PowerOutletVoltageLow
+          condition: C
+          data:
+            - refId: A
+              relativeTimeRange:
+                from: 10800
+                to: 0
+              datasourceUid: ffmvx2867d69sc
+              model:
+                datasource:
+                    type: prometheus
+                    uid: ffmvx2867d69sc
+                editorMode: builder
+                expr: tuya_power_voltage_v
+                instant: true
+                interval: ""
+                intervalMs: 15000
+                legendFormat: __auto
+                maxDataPoints: 43200
+                range: false
+                refId: A
+            - refId: C
+              queryType: expression
+              datasourceUid: __expr__
+              model:
+                conditions:
+                    - evaluator:
+                        params:
+                            - 198
+                        type: lte
+                      operator:
+                        type: and
+                      query:
+                        params:
+                            - C
+                      reducer:
+                        params: []
+                        type: last
+                      type: query
+                datasource:
+                    type: __expr__
+                    uid: __expr__
+                expression: A
+                intervalMs: 1000
+                maxDataPoints: 43200
+                refId: C
+                type: threshold
+          dashboardUid: suvlbn5
+          panelId: 24
+          noDataState: NoData
+          execErrState: Error
+          for: 10s
+          annotations:
+            __dashboardUid__: suvlbn5
+            __panelId__: "24"
+            summary: beastnet-power-outlet-1 voltage is under 5% tolerance. Electronic devices are receiving undervoltage.
+          isPaused: false
+          notification_settings:
+            receiver: telegram ntswell-alerts
+    - orgId: 1
+      name: Over 5 Minutes
+      folder: Room Metrics
+      interval: 5m
+      rules:
+        - uid: ffnaiwxc8kum8c
+          title: RoomTemperatureMedium
+          condition: C
+          data:
+            - refId: A
+              relativeTimeRange:
+                from: 600
+                to: 0
+              datasourceUid: ffmvx2867d69sc
+              model:
+                datasource:
+                    type: prometheus
+                    uid: ffmvx2867d69sc
+                editorMode: builder
+                expr: sensor_temperature_celsius{job="bardi_sensors"}
+                instant: true
+                intervalMs: 1000
+                legendFormat: __auto
+                maxDataPoints: 43200
+                range: false
+                refId: A
+            - refId: C
+              queryType: expression
+              datasourceUid: __expr__
+              model:
+                conditions:
+                    - evaluator:
+                        params:
+                            - 33
+                        type: gte
+                      operator:
+                        type: and
+                      query:
+                        params:
+                            - C
+                      reducer:
+                        params: []
+                        type: last
+                      type: query
+                datasource:
+                    type: __expr__
+                    uid: __expr__
+                expression: A
+                intervalMs: 1000
+                maxDataPoints: 43200
+                refId: C
+                type: threshold
+          noDataState: NoData
+          execErrState: Error
+          for: 5m
+          keepFiringFor: 1m
+          annotations:
+            summary: Room Temperature is reaching warning range over 33 degrees for over 5 minutes. High load compute risks host overheating.
+          isPaused: false
+          notification_settings:
+            receiver: telegram ntswell-alerts
+        - uid: efnajbbm4nabkf
+          title: RoomTemperatureHigh
+          condition: C
+          data:
+            - refId: A
+              relativeTimeRange:
+                from: 600
+                to: 0
+              datasourceUid: ffmvx2867d69sc
+              model:
+                datasource:
+                    type: prometheus
+                    uid: ffmvx2867d69sc
+                editorMode: builder
+                expr: sensor_temperature_celsius{job="bardi_sensors"}
+                instant: true
+                intervalMs: 1000
+                legendFormat: __auto
+                maxDataPoints: 43200
+                range: false
+                refId: A
+            - refId: C
+              queryType: expression
+              datasourceUid: __expr__
+              model:
+                conditions:
+                    - evaluator:
+                        params:
+                            - 36
+                        type: gte
+                      operator:
+                        type: and
+                      query:
+                        params:
+                            - C
+                      reducer:
+                        params: []
+                        type: last
+                      type: query
+                datasource:
+                    type: __expr__
+                    uid: __expr__
+                expression: A
+                intervalMs: 1000
+                maxDataPoints: 43200
+                refId: C
+                type: threshold
+          noDataState: NoData
+          execErrState: Error
+          for: 5m
+          keepFiringFor: 1m
+          annotations:
+            summary: Room Temperature is reaching high range over 35 degrees for over 5 minutes. High load compute risks host overheating.
+          isPaused: false
+          notification_settings:
+            receiver: telegram ntswell-alerts
+        - uid: cfpo2bjeedb7kf
+          title: RoomHumidityHigh
+          condition: C
+          data:
+            - refId: A
+              relativeTimeRange:
+                from: 10800
+                to: 0
+              datasourceUid: ffmvx2867d69sc
+              model:
+                datasource:
+                    type: prometheus
+                    uid: ffmvx2867d69sc
+                editorMode: builder
+                expr: sensor_humidity_percent{job="bardi_sensors"}
+                instant: true
+                interval: ""
+                intervalMs: 15000
+                legendFormat: __auto
+                maxDataPoints: 43200
+                range: false
+                refId: A
+            - refId: C
+              queryType: expression
+              datasourceUid: __expr__
+              model:
+                conditions:
+                    - evaluator:
+                        params:
+                            - 59
+                        type: gt
+                      operator:
+                        type: and
+                      query:
+                        params:
+                            - C
+                      reducer:
+                        params: []
+                        type: last
+                      type: query
+                datasource:
+                    type: __expr__
+                    uid: __expr__
+                expression: A
+                intervalMs: 1000
+                maxDataPoints: 43200
+                refId: C
+                type: threshold
+          dashboardUid: suvlbn5
+          panelId: 14
+          noDataState: NoData
+          execErrState: Error
+          for: 5m
+          annotations:
+            __dashboardUid__: suvlbn5
+            __panelId__: "14"
+            summary: Room Humidity is above dry range (60%) over 5 minutes. Prolonged humid room affects electronics health and human comfort.
+          isPaused: false
+          notification_settings:
+            receiver: telegram ntswell-alerts
