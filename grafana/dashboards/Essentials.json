@@ -5,8 +5,8 @@
     "name": "suvlbn5",
     "namespace": "default",
     "uid": "a2ff50b5-ad7a-4f86-bf25-4dee9505ef80",
-    "resourceVersion": "1781927177266006",
-    "generation": 35,
+    "resourceVersion": "1781998919764982",
+    "generation": 51,
     "creationTimestamp": "2026-05-27T14:19:40Z",
     "labels": {
       "grafana.app/deprecatedInternalID": "1495657549156352"
@@ -16,7 +16,7 @@
       "grafana.app/folder": "",
       "grafana.app/saved-from-ui": "Grafana v13.0.1+security-01 (9bbe672d)",
       "grafana.app/updatedBy": "user:dfmtfgxn02kg0e",
-      "grafana.app/updatedTimestamp": "2026-06-20T03:46:17Z"
+      "grafana.app/updatedTimestamp": "2026-06-20T23:41:59Z"
     }
   },
   "spec": {
@@ -404,6 +404,8 @@
               },
               "fieldConfig": {
                 "defaults": {
+                  "min": 0,
+                  "max": 100,
                   "thresholds": {
                     "mode": "absolute",
                     "steps": [
@@ -422,7 +424,7 @@
                     ]
                   },
                   "color": {
-                    "mode": "continuous-GrYlRd"
+                    "mode": "thresholds"
                   },
                   "custom": {
                     "axisBorderShow": false,
@@ -1634,18 +1636,33 @@
               "fieldConfig": {
                 "defaults": {
                   "unit": "watt",
+                  "min": 0,
+                  "max": 500,
                   "thresholds": {
                     "mode": "absolute",
                     "steps": [
                       {
                         "value": 0,
                         "color": "green"
+                      },
+                      {
+                        "value": 150,
+                        "color": "#EAB839"
+                      },
+                      {
+                        "value": 200,
+                        "color": "#EF843C"
+                      },
+                      {
+                        "value": 300,
+                        "color": "#E24D42"
                       }
                     ]
                   },
                   "color": {
-                    "mode": "palette-classic"
-                  }
+                    "mode": "thresholds"
+                  },
+                  "fieldMinMax": false
                 },
                 "overrides": []
               }
@@ -1726,6 +1743,8 @@
               "fieldConfig": {
                 "defaults": {
                   "unit": "mamp",
+                  "min": 0,
+                  "max": 3310,
                   "thresholds": {
                     "mode": "absolute",
                     "steps": [
@@ -1822,6 +1841,8 @@
               "fieldConfig": {
                 "defaults": {
                   "unit": "volt",
+                  "min": 250,
+                  "max": 180,
                   "thresholds": {
                     "mode": "absolute",
                     "steps": [
@@ -1830,6 +1851,9 @@
                         "color": "green"
                       }
                     ]
+                  },
+                  "color": {
+                    "mode": "palette-classic"
                   }
                 },
                 "overrides": []
@@ -1911,6 +1935,8 @@
               "fieldConfig": {
                 "defaults": {
                   "unit": "kwatth",
+                  "min": 0,
+                  "max": 2.4,
                   "thresholds": {
                     "mode": "absolute",
                     "steps": [
@@ -3309,7 +3335,7 @@
                         "x": 0,
                         "y": 0,
                         "width": 6,
-                        "height": 4,
+                        "height": 5,
                         "element": {
                           "kind": "ElementReference",
                           "name": "panel-22"
@@ -3322,7 +3348,7 @@
                         "x": 6,
                         "y": 0,
                         "width": 6,
-                        "height": 4,
+                        "height": 5,
                         "element": {
                           "kind": "ElementReference",
                           "name": "panel-23"
@@ -3335,7 +3361,7 @@
                         "x": 12,
                         "y": 0,
                         "width": 6,
-                        "height": 4,
+                        "height": 5,
                         "element": {
                           "kind": "ElementReference",
                           "name": "panel-24"
@@ -3348,7 +3374,7 @@
                         "x": 18,
                         "y": 0,
                         "width": 6,
-                        "height": 4,
+                        "height": 5,
                         "element": {
                           "kind": "ElementReference",
                           "name": "panel-25"
