@@ -5,8 +5,8 @@
     "name": "suvlbn5",
     "namespace": "default",
     "uid": "a2ff50b5-ad7a-4f86-bf25-4dee9505ef80",
-    "resourceVersion": "1781998919764982",
-    "generation": 51,
+    "resourceVersion": "1782288852820010",
+    "generation": 61,
     "creationTimestamp": "2026-05-27T14:19:40Z",
     "labels": {
       "grafana.app/deprecatedInternalID": "1495657549156352"
@@ -16,7 +16,7 @@
       "grafana.app/folder": "",
       "grafana.app/saved-from-ui": "Grafana v13.0.1+security-01 (9bbe672d)",
       "grafana.app/updatedBy": "user:dfmtfgxn02kg0e",
-      "grafana.app/updatedTimestamp": "2026-06-20T23:41:59Z"
+      "grafana.app/updatedTimestamp": "2026-06-24T08:14:12Z"
     }
   },
   "spec": {
@@ -69,6 +69,7 @@
                         "aggregator": "sum",
                         "downsampleAggregator": "avg",
                         "downsampleFillPolicy": "none",
+                        "refCount": 0,
                         "target": "aliasByNode(limit(sortByMaxima(perSecond(proxmox.qemu.*.diskwrite)), 10), 2, 3)",
                         "textEditor": false
                       }
@@ -191,7 +192,7 @@
                       },
                       "spec": {
                         "refCount": 0,
-                        "target": "proxmox.nodes.lavender.memory.memtotal"
+                        "target": "proxmox.nodes.$nodehost.memory.memtotal"
                       }
                     },
                     "refId": "host_memory_total",
@@ -210,7 +211,7 @@
                       },
                       "spec": {
                         "refCount": 0,
-                        "target": "proxmox.nodes.lavender.memory.memused"
+                        "target": "proxmox.nodes.$nodehost.memory.memused"
                       }
                     },
                     "refId": "host_memory_used",
@@ -330,7 +331,7 @@
                       },
                       "spec": {
                         "refCount": 0,
-                        "target": "proxmox.nodes.lavender.memory.memtotal"
+                        "target": "proxmox.nodes.$nodehost.memory.memtotal"
                       }
                     },
                     "refId": "host_memory_total",
@@ -349,7 +350,7 @@
                       },
                       "spec": {
                         "refCount": 0,
-                        "target": "proxmox.nodes.lavender.memory.memused"
+                        "target": "proxmox.nodes.$nodehost.memory.memused"
                       }
                     },
                     "refId": "host_memory_used",
@@ -732,7 +733,7 @@
                       },
                       "spec": {
                         "editorMode": "builder",
-                        "expr": "sensor_humidity_percent{job=\"bardi_sensors\"}",
+                        "expr": "sensor_humidity_percent",
                         "legendFormat": "__auto",
                         "range": true
                       }
@@ -821,7 +822,7 @@
                       },
                       "spec": {
                         "editorMode": "builder",
-                        "expr": "sensor_temperature_celsius{job=\"bardi_sensors\"}",
+                        "expr": "sensor_temperature_celsius",
                         "legendFormat": "__auto",
                         "range": true
                       }
@@ -918,7 +919,7 @@
                       },
                       "spec": {
                         "editorMode": "builder",
-                        "expr": "sensor_temperature_celsius{job=\"bardi_sensors\"}",
+                        "expr": "sensor_temperature_celsius",
                         "legendFormat": "__auto",
                         "range": true
                       }
@@ -1042,7 +1043,7 @@
                       },
                       "spec": {
                         "editorMode": "builder",
-                        "expr": "node_hwmon_temp_celsius{sensor=\"temp4\"}",
+                        "expr": "node_hwmon_temp_celsius{sensor=\"temp4\", job=\"proxmox-$nodehost\"}",
                         "legendFormat": "__auto",
                         "range": true
                       }
@@ -2935,7 +2936,7 @@
                       },
                       "spec": {
                         "refCount": 0,
-                        "target": "proxmox.nodes.lavender.cpustat.avg1"
+                        "target": "proxmox.nodes.$nodehost.cpustat.avg1"
                       }
                     },
                     "refId": "cpu_load_value",
@@ -2954,7 +2955,7 @@
                       },
                       "spec": {
                         "refCount": 0,
-                        "target": "proxmox.nodes.lavender.cpustat.cpus"
+                        "target": "proxmox.nodes.$nodehost.cpustat.cpus"
                       }
                     },
                     "refId": "cpu_number_of_cores",
@@ -3060,7 +3061,7 @@
                       },
                       "spec": {
                         "refCount": 0,
-                        "target": "proxmox.nodes.lavender.uptime"
+                        "target": "proxmox.nodes.$nodehost.uptime"
                       }
                     },
                     "refId": "A",
@@ -3143,7 +3144,7 @@
                       },
                       "spec": {
                         "refCount": 0,
-                        "target": "proxmox.nodes.lavender.cpustat.avg1"
+                        "target": "proxmox.nodes.$nodehost.cpustat.avg1"
                       }
                     },
                     "refId": "cpu_load_value",
@@ -3162,7 +3163,7 @@
                       },
                       "spec": {
                         "refCount": 0,
-                        "target": "proxmox.nodes.lavender.cpustat.cpus"
+                        "target": "proxmox.nodes.$nodehost.cpustat.cpus"
                       }
                     },
                     "refId": "cpu_number_of_cores",
@@ -3745,6 +3746,40 @@
           "label": "",
           "hide": "hideVariable",
           "skipUrlSync": true
+        }
+      },
+      {
+        "kind": "QueryVariable",
+        "spec": {
+          "name": "nodehost",
+          "current": {
+            "text": "lavender",
+            "value": "lavender"
+          },
+          "hide": "dontHide",
+          "refresh": "onDashboardLoad",
+          "skipUrlSync": false,
+          "query": {
+            "kind": "DataQuery",
+            "group": "graphite",
+            "version": "v0",
+            "datasource": {
+              "name": "ffmtg9w5jh62oc"
+            },
+            "spec": {
+              "queryType": "Default",
+              "refId": "A",
+              "target": "proxmox.nodes.*"
+            }
+          },
+          "regex": "",
+          "regexApplyTo": "value",
+          "sort": "disabled",
+          "definition": "",
+          "options": [],
+          "multi": false,
+          "includeAll": false,
+          "allowCustomValue": true
         }
       }
     ]
